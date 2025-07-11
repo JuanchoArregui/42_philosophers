@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/07 16:45:46 by jarregui          #+#    #+#              #
-#    Updated: 2025/07/07 16:49:57 by jarregui         ###   ########.fr        #
+#    Updated: 2025/07/11 13:25:53 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,8 @@ RM = rm -f
 
 
 # SOURCES
-SRCS 	= philosophers.c
+SRCS 	= philosophers.c \
+		utils.c
 OBJS = $(SRCS:.c=.o)
 
 # RULES DECLARATION:
@@ -51,8 +52,8 @@ all: philo
 	@echo "${ORANGE}${PROY_NAME} compiling file: $(BROWN)[$<]...${DEF_COLOR}"
 	@$(CC) $(CFLAGS) -c -o $@ $< 
 
-philo: philosophers.o
-	@$(CC) ${CFLAGS} philosophers.o -o $(EXEC_FILE_NAME)
+philo: $(OBJS)
+	@$(CC) ${CFLAGS} ${OBJS} -o $(EXEC_FILE_NAME)
 	@echo "$(GREEN)✓ Created $(EXEC_FILE_NAME) File$(DEF_COLOR)\n"
 
 clean:

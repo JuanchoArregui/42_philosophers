@@ -1,33 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.h                                     :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/10 20:11:51 by jarregui          #+#    #+#             */
-/*   Updated: 2025/07/11 13:12:25 by jarregui         ###   ########.fr       */
+/*   Created: 2025/07/11 13:07:09 by jarregui          #+#    #+#             */
+/*   Updated: 2025/07/11 13:16:03 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILOSPHERS_H
-# define PHILOSPHERS_H
+#include "philosophers.h"
 
+long	ft_atoi(const char *str)
+{
+	long	num;
+	int		sign;
+	int		i;
 
-# include <sys/types.h>
-# include <unistd.h>
-# include <signal.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <limits.h>
-
-# ifndef DEBUG
-#  define DEBUG 0
-# endif
-
-# define PHILO_MAX_COUNT 200
-# define END_TRANSMISSION '\0'
-
-long	ft_atoi(const char *str);
-
-#endif
+	i = 0;
+	sign = 1;
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
+		++i;
+	if (str[i] == '-' || str[i] == '+')
+		if (str[i++] == '-')
+			sign = -1;
+	num = 0;
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		num *= 10;
+		num = num + (str[i] - '0');
+		++i;
+		if (num > INT_MAX)
+			break ;
+	}
+	return (num * sign);
+}
