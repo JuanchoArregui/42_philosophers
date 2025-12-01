@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 13:07:09 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/01 19:15:47 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 00:09:03 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ long	get_time_ms(void)
 	return (tv.tv_sec * 1000L + tv.tv_usec / 1000L);
 }
 
-void	print_status(t_philo *p, char *msg)
+void	print_status(t_philo *p, char *msg, int num_meals)
 {
 	int	died;
 
@@ -63,10 +63,13 @@ void	print_status(t_philo *p, char *msg)
 	pthread_mutex_unlock(&p->rules->death_flag_lock);
 	if (!died)
 	{
-		printf(YELLOW "%ld" RESET " %d %s\n",
+		printf(YELLOW "%ld" RESET " %d %s",
 			get_time_ms() - p->rules->simulation_start_time,
-			p->id,
-			msg);
+			p->id, msg);
+		if (DEBUG && num_meals >= 0)
+			printf( CYAN " (total meals: %d/%d)" RESET, num_meals,
+				p->rules->num_times_each_must_eat);
+		printf("\n");
 	}
 
 	pthread_mutex_unlock(&p->rules->print_lock);

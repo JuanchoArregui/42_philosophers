@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 20:11:51 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/01 18:19:51 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 00:09:23 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,14 @@
 #  define RED "\033[0;91m"
 #  define YELLOW "\033[0;93m"
 #  define RESET "\033[0m"
+#  define GREEN "\033[0;92m"
+#  define CYAN "\033[0;96m"
 # else
 #  define RED ""
 #  define YELLOW  ""
 #  define RESET ""
+#  define GREEN ""
+#  define CYAN ""
 # endif
 
 
@@ -85,7 +89,7 @@ int		parse_args_and_start_philos(int argc, char **argv, t_rules *rules);
 long	ft_atoi(const char *str);
 int		error_message(char *text, int signal);
 long	get_time_ms(void);
-void	print_status(t_philo *p, char *msg);
+void	print_status(t_philo *p, char *msg, int num_meals);
 int		check_dead(t_rules *rules);
 
 #endif

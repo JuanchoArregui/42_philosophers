@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/07 16:45:46 by jarregui          #+#    #+#              #
-#    Updated: 2025/12/01 12:59:22 by jarregui         ###   ########.fr        #
+#    Updated: 2025/12/01 23:43:40 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,8 +69,9 @@ debug: fclean
 	  TD=$$(shuf -i 200-2000 -n 1); \
 	  TE=$$(shuf -i 50-300 -n 1); \
 	  TS=$$(shuf -i 50-300 -n 1); \
-	  echo "$(CYAN)Parámetros generados: $(YELLOW)$$NP $$TD $$TE $$TS$(DEF_COLOR)"; \
-	  ./$(EXEC_FILE_NAME) $$NP $$TD $$TE $$TS
+	  ME=$$(shuf -i 5-25 -n 1); \
+	  echo "$(CYAN)Parámetros generados: $(YELLOW)$$NP $$TD $$TE $$TS $$ME$(DEF_COLOR)"; \
+	  ./$(EXEC_FILE_NAME) $$NP $$TD $$TE $$TS $$ME
 
 clean:
 	@${RM} ${OBJS} ${OBJS_BONUS}

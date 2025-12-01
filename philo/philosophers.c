@@ -6,11 +6,41 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 17:31:44 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/01 19:15:10 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 00:07:06 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+int	all_philos_ate_enough(t_rules *rules, t_philo *philos)
+{
+	int	i;
+	int	all_done;
+
+	i = 0;
+	all_done = 1;
+	pthread_mutex_lock(&rules->death_flag_lock);
+	if (rules->someone_died)
+	{
+		pthread_mutex_unlock(&rules->death_flag_lock);
+		return (0);
+	}
+	pthread_mutex_unlock(&rules->death_flag_lock);
+	while (i < rules->num_philosophers)
+	{
+		pthread_mutex_lock(&philos[i].meal_lock);
+		if (philos[i].times_eaten < rules->num_times_each_must_eat)
+			all_done = 0;
+		pthread_mutex_unlock(&philos[i].meal_lock);
+		i++;
+	}
+	if (DEBUG && all_done)
+		printf(GREEN
+			"Todos los %d filósofos han comido lo suficiente: %d veces.\n"
+			RESET, rules->num_philosophers, rules->num_times_each_must_eat);
+	return (all_done);
+}
+
 
 void	*monitor_routine(void *arg)
 {
@@ -25,6 +55,12 @@ void	*monitor_routine(void *arg)
 	(void)rules;
 	while (1)
 	{
+		// 1. Chequea si TODOS comieron lo suficiente
+		if (rules->num_times_each_must_eat != -1 && 
+			all_philos_ate_enough(rules, philos))
+			return (NULL);
+
+        // 2. Chequea muertes
 		i = 0;
 		while (i < rules->num_philosophers)
 		{
@@ -35,7 +71,7 @@ void	*monitor_routine(void *arg)
 			last = philos[i].last_meal_time;
 			pthread_mutex_unlock(&philos[i].meal_lock);
 
-			if (now - last >= rules->time_to_die)
+			if (now - last > rules->time_to_die) //quitamos el = para dar ese pelin más de margen en caso de ser exactamente iguales
 			{
 				// Marcar la muerte ANTES de imprimir
 				pthread_mutex_lock(&rules->death_flag_lock);
@@ -66,7 +102,12 @@ void	*philo_routine(void *arg)
 	if (p->id % 2 == 0)
 		usleep(1000); // pequeño delay para evitar deadlocks
 
-	while (!p->rules->someone_died)
+		
+	pthread_mutex_lock(&p->meal_lock);
+    p->last_meal_time = get_time_ms();  // ← Cada filósofo inicializa SU propio tiempo
+    pthread_mutex_unlock(&p->meal_lock);
+
+	while (!check_dead(p->rules))
 	{
 		take_forks(p);
 		if (check_dead(p->rules))
