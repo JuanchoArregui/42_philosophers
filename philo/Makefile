@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+         #
+#    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/07 16:45:46 by jarregui          #+#    #+#              #
-#    Updated: 2025/07/11 13:25:53 by jarregui         ###   ########.fr        #
+#    Updated: 2025/12/01 12:59:22 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,9 +38,14 @@ PROY_NAME =	PHILOSOPHERS
 EXEC_FILE_NAME = philo
 RM = rm -f
 
+# DEBUG_FLAGS =
+DEBUG_FLAGS = -g -DDEBUG=1
+SANITIZE_FLAGS = -g3 -fsanitize=address
 
 # SOURCES
 SRCS 	= philosophers.c \
+		philo_utils.c \
+		start.c \
 		utils.c
 OBJS = $(SRCS:.c=.o)
 
@@ -55,6 +60,17 @@ all: philo
 philo: $(OBJS)
 	@$(CC) ${CFLAGS} ${OBJS} -o $(EXEC_FILE_NAME)
 	@echo "$(GREEN)✓ Created $(EXEC_FILE_NAME) File$(DEF_COLOR)\n"
+
+debug: fclean
+	$(MAKE) CFLAGS="$(CFLAGS) $(DEBUG_FLAGS) $(SANITIZE_FLAGS)" philo
+	@echo "$(GREEN)DEBUG: Ejecutando con sanitizer y DEBUG=1$(DEF_COLOR)"
+	@echo "$(YELLOW)→ Generando parámetros aleatorios...$(DEF_COLOR)"
+	@NP=$$(shuf -i 2-50 -n 1); \
+	  TD=$$(shuf -i 200-2000 -n 1); \
+	  TE=$$(shuf -i 50-300 -n 1); \
+	  TS=$$(shuf -i 50-300 -n 1); \
+	  echo "$(CYAN)Parámetros generados: $(YELLOW)$$NP $$TD $$TE $$TS$(DEF_COLOR)"; \
+	  ./$(EXEC_FILE_NAME) $$NP $$TD $$TE $$TS
 
 clean:
 	@${RM} ${OBJS} ${OBJS_BONUS}
