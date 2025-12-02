@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:04:06 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 18:05:18 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 22:01:22 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	main(int argc, char **argv)
 	if (!rules)
 		return (err_msg("Malloc failed\n", 1));
 	ret = parse_args_and_start_philos(argc, argv, rules);
-	if (DEBUG)
+	if (DEBUG && ret == 0)
 	{
 		printf(CYAN "Fin simulación con estos parámetros:\n");
 		printf(" -Número de filósofos: %d\n", rules->num_philosophers);

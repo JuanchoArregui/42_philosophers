@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 13:07:09 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 21:38:01 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 22:02:22 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	err_msg(char *text, int signal)
 {
 	if (text)
-		printf("%s\n", text);
+		printf(RED "%s\n" RESET, text);
 	return (signal);
 }
 
