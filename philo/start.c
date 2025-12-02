@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 10:08:11 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 17:57:55 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 21:31:47 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,18 @@ static int	check_args(int argc, char **argv, int i)
 
 	if (argc < 5 || argc > 6)
 		return (print_err_params());
-	while (++i < argc)
+	while (i < argc)
 	{
 		if (!is_number(argv[i]))
-			return (err_msg("ERROR: NOT VALID PARAMS.\n", 1));
+			return (err_msg("ERROR: NOT NUMERIC PARAMS.\n", 1));
 		num = ft_atoi(argv[i]);
-		if (num < 0)
-			return (err_msg("ERROR: NEGATIVE OR NOT VALID PARAM.\n", 1));
-		else if (i == 1 && (num < 1 || num > PHILO_MAX_COUNT))
-			return (err_msg("[Argument ERROR PHILO_MAX_COUNT]\n", 1));
-		else if (i == 5 && (num < 0 || num > INT_MAX))
+		if (num < 1)
+			return (err_msg("ERROR: NEGATIVE, ZERO OR NOT VALID PARAM.\n", 1));
+		else if (num > INT_MAX)
 			return (err_msg("[Argument ERROR INT_MAX]\n", 1));
-		else if (i != 1 && i != 5 && (num < 1 || num > INT_MAX))
-			return (err_msg("[Argument ERROR]\n", 1));
+		else if (i == 1 && num > PHILO_MAX_COUNT)
+			return (err_msg("[Argument ERROR PHILO_MAX_COUNT]\n", 1));
+		i++;
 	}
 	return (0);
 }
@@ -41,6 +40,8 @@ static int	init_rules(int argc, char **argv, t_rules *rules)
 
 	i = 0;
 	rules->num_philosophers = ft_atoi(argv[1]);
+	if (rules->num_philosophers < 1)
+		return (err_msg("ERROR: num_philosophers must be >= 1\n", 1));
 	rules->time_to_die = ft_atoi(argv[2]);
 	rules->time_to_eat = ft_atoi(argv[3]);
 	rules->time_to_sleep = ft_atoi(argv[4]);

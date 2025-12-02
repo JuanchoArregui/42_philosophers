@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: jarregui <jarregui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 13:07:09 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 17:57:55 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 21:38:01 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	print_status(t_philo *p, char *msg, int num_meals)
 		printf(YELLOW "%ld" RESET " %d %s",
 			get_time_ms() - p->rules->simulation_start_time,
 			p->id, msg);
-		if (DEBUG && num_meals >= 0)
+		if (DEBUG && p->rules->n_must_eat > 0 && num_meals >= 0)
 			printf(CYAN " (total meals: %d/%d)" RESET, num_meals,
 				p->rules->n_must_eat);
 		printf("\n");
