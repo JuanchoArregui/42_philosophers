@@ -6,86 +6,27 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 17:31:44 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 17:04:34 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 18:09:49 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static int	all_philos_ate_enough(t_rules *rules, t_philo *philos)
+void	set_last_meal_time(t_philo *p)
 {
-	int	i;
-	int	all_done;
-
-	i = 0;
-	all_done = 1;
-	pthread_mutex_lock(&rules->death_flag_lock);
-	if (rules->someone_died)
-	{
-		pthread_mutex_unlock(&rules->death_flag_lock);
-		return (0);
-	}
-	pthread_mutex_unlock(&rules->death_flag_lock);
-	while (i < rules->num_philosophers)
-	{
-		pthread_mutex_lock(&philos[i].meal_lock);
-		if (philos[i].times_eaten < rules->num_times_each_must_eat)
-			all_done = 0;
-		pthread_mutex_unlock(&philos[i].meal_lock);
-		i++;
-	}
-	if (DEBUG && all_done)
-		printf(GREEN
-			"Todos los %d filósofos han comido lo suficiente: %d veces.\n"
-			RESET, rules->num_philosophers, rules->num_times_each_must_eat);
-	return (all_done);
+	pthread_mutex_lock(&p->meal_lock);
+	p->last_meal_time = get_time_ms();
+	pthread_mutex_unlock(&p->meal_lock);
 }
 
-static int	monitor_check_dead(t_rules *rules, t_philo *philos, int i)
+static void	*philo_alone(t_philo *p)
 {
-	long	now;
-	long	last;
-
-	while (i < rules->num_philosophers)
-	{
-		now = get_time_ms();
-		pthread_mutex_lock(&philos[i].meal_lock);
-		last = philos[i].last_meal_time;
-		pthread_mutex_unlock(&philos[i].meal_lock);
-		if (now - last > rules->time_to_die)
-		{
-			pthread_mutex_lock(&rules->death_flag_lock);
-			rules->someone_died = 1;
-			pthread_mutex_unlock(&rules->death_flag_lock);
-			pthread_mutex_lock(&rules->print_lock);
-			printf(YELLOW "%ld" RESET " %d " RED "died\n" RESET,
-				get_time_ms() - rules->simulation_start_time,
-				philos[i].id);
-			pthread_mutex_unlock(&rules->print_lock);
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-void	*monitor_routine(void *arg)
-{
-	t_philo	*philos;
-	t_rules	*rules;
-
-	philos = (t_philo *)arg;
-	rules = philos[0].rules;
-	(void)rules;
-	while (1)
-	{
-		if (rules->num_times_each_must_eat != -1
-			&& all_philos_ate_enough(rules, philos))
-			return (NULL);
-		if (monitor_check_dead(rules, philos, 0))
-			return (NULL);
-		usleep(10);
-	}
+	pthread_mutex_lock(&p->rules->forks[p->left_fork_index]);
+	print_left(p);
+	while (!check_dead(p->rules))
+		usleep(100);
+	pthread_mutex_unlock(&p->rules->forks[p->left_fork_index]);
+	return (NULL);
 }
 
 void	*philo_routine(void *arg)
@@ -93,11 +34,11 @@ void	*philo_routine(void *arg)
 	t_philo	*p;
 
 	p = (t_philo *)arg;
+	if (p->rules->num_philosophers == 1)
+		return (philo_alone(p));
 	if (p->id % 2 == 0)
 		usleep(p->id * 200);
-	pthread_mutex_lock(&p->meal_lock);
-	p->last_meal_time = get_time_ms();
-	pthread_mutex_unlock(&p->meal_lock);
+	set_last_meal_time(p);
 	while (!check_dead(p->rules))
 	{
 		take_forks(p);
@@ -106,8 +47,7 @@ void	*philo_routine(void *arg)
 		eat(p);
 		if (check_dead(p->rules))
 			break ;
-		if (p->rules->num_times_each_must_eat != -1
-			&& p->times_eaten >= p->rules->num_times_each_must_eat)
+		if (p->rules->n_must_eat != -1 && p->t_eaten >= p->rules->n_must_eat)
 			break ;
 		go_sleep(p);
 		if (check_dead(p->rules))
@@ -115,18 +55,4 @@ void	*philo_routine(void *arg)
 		think(p);
 	}
 	return (NULL);
-}
-
-int	main(int argc, char **argv)
-{
-	t_rules	*rules;
-
-	if (DEBUG)
-		printf("\033[0;92mEmpezando el philosophers\033[0m\n");
-	rules = malloc(sizeof(t_rules));
-	if (!rules)
-		return (err_msg("Malloc failed\n", 1));
-	parse_args_and_start_philos(argc, argv, rules);
-	free(rules);
-	return (0);
 }

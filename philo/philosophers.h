@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 20:11:51 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 17:17:29 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 18:08:30 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_rules
 	long			time_to_die;
 	long			time_to_eat;
 	long			time_to_sleep;
-	int				num_times_each_must_eat;
+	int				n_must_eat;
 	int				someone_died;
 	long			simulation_start_time;
 	pthread_mutex_t	*forks;
@@ -60,7 +60,7 @@ typedef struct s_rules
 typedef struct s_philo
 {
 	int				id;
-	int				times_eaten;
+	int				t_eaten;
 	t_rules			*rules;
 	int				left_fork_index;
 	int				right_fork_index;
@@ -68,6 +68,9 @@ typedef struct s_philo
 	pthread_t		thread;
 	pthread_mutex_t	meal_lock;
 }	t_philo;
+
+//main.c
+void	*monitor_routine(void *arg);
 
 //philo_utils.c
 void	take_forks(t_philo *p);
@@ -77,8 +80,8 @@ void	think(t_philo *p);
 void	smart_sleep(long duration, t_rules *rules);
 
 //philosophers.c
+void	set_last_meal_time(t_philo *p);
 void	*philo_routine(void *arg);
-void	*monitor_routine(void *arg);
 
 //start.c
 int		parse_args_and_start_philos(int argc, char **argv, t_rules *rules);

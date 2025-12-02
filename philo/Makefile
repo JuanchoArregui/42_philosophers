@@ -6,7 +6,7 @@
 #    By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/07 16:45:46 by jarregui          #+#    #+#              #
-#    Updated: 2025/12/02 10:52:28 by jarregui         ###   ########.fr        #
+#    Updated: 2025/12/02 18:06:05 by jarregui         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,8 @@ DEBUG_FLAGS = -g -DDEBUG=1
 SANITIZE_FLAGS = -g3 -fsanitize=address
 
 # SOURCES
-SRCS 	= philosophers.c \
+SRCS 	= main.c \
+		philosophers.c \
 		philo_utils.c \
 		start.c \
 		utils_1.c \

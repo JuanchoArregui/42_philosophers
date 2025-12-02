@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 13:07:09 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 17:04:34 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:57:55 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	print_status(t_philo *p, char *msg, int num_meals)
 			p->id, msg);
 		if (DEBUG && num_meals >= 0)
 			printf(CYAN " (total meals: %d/%d)" RESET, num_meals,
-				p->rules->num_times_each_must_eat);
+				p->rules->n_must_eat);
 		printf("\n");
 	}
 	pthread_mutex_unlock(&p->rules->print_lock);

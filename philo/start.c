@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 10:08:11 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 17:20:05 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:57:55 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ static int	init_rules(int argc, char **argv, t_rules *rules)
 	rules->time_to_die = ft_atoi(argv[2]);
 	rules->time_to_eat = ft_atoi(argv[3]);
 	rules->time_to_sleep = ft_atoi(argv[4]);
-	rules->num_times_each_must_eat = -1;
+	rules->n_must_eat = -1;
 	if (argc == 6)
-		rules->num_times_each_must_eat = ft_atoi(argv[5]);
+		rules->n_must_eat = ft_atoi(argv[5]);
 	rules->someone_died = 0;
 	rules->simulation_start_time = 0;
 	rules->forks = malloc(sizeof(pthread_mutex_t) * rules->num_philosophers);
@@ -70,7 +70,7 @@ static void	init_philos(t_rules *rules, t_philo *philos)
 	while (i < rules->num_philosophers)
 	{
 		philos[i].id = i + 1;
-		philos[i].times_eaten = 0;
+		philos[i].t_eaten = 0;
 		philos[i].rules = rules;
 		philos[i].left_fork_index = i;
 		philos[i].right_fork_index = (i + 1) % rules->num_philosophers;

@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 21:54:51 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 10:56:51 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 18:11:41 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,12 @@ void	take_forks(t_philo *p)
 void	eat(t_philo *p)
 {
 	if (DEBUG)
-		print_status(p, "is eating 🍝", p->times_eaten + 1);
+		print_status(p, "is eating 🍝", p->t_eaten + 1);
 	else
 		print_status(p, "is eating", -1);
 	smart_sleep(p->rules->time_to_eat, p->rules);
-	pthread_mutex_lock(&p->meal_lock);
-	p->last_meal_time = get_time_ms();
-	pthread_mutex_unlock(&p->meal_lock);
-	p->times_eaten++;
+	set_last_meal_time(p);
+	p->t_eaten++;
 	pthread_mutex_unlock(&p->rules->forks[p->left_fork_index]);
 	pthread_mutex_unlock(&p->rules->forks[p->right_fork_index]);
 }
