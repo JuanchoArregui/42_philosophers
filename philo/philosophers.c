@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 17:31:44 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 16:23:37 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:04:34 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int	main(int argc, char **argv)
 		printf("\033[0;92mEmpezando el philosophers\033[0m\n");
 	rules = malloc(sizeof(t_rules));
 	if (!rules)
-		return (error_message("Malloc failed\n", 1));
+		return (err_msg("Malloc failed\n", 1));
 	parse_args_and_start_philos(argc, argv, rules);
 	free(rules);
 	return (0);

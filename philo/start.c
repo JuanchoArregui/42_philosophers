@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 10:08:11 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 16:55:27 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:20:05 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,20 @@ static int	check_args(int argc, char **argv, int i)
 	long	num;
 
 	if (argc < 5 || argc > 6)
-	{
-		printf(RED "ERROR - You must enter 4 arguments:\n");
-		printf("	-number_of_philosophers\n	-time_to_die\n");
-		printf("	-time_to_eat\n	-time_to_sleep\n");
-		printf("And an optional 5th argument:\n");
-		printf("	-number_of_times_each_philosopher_must_eat\n" RESET);
-		return (1);
-	}
+		return (print_err_params());
 	while (++i < argc)
 	{
+		if (!is_number(argv[i]))
+			return (err_msg("ERROR: NOT VALID PARAMS.\n", 1));
 		num = ft_atoi(argv[i]);
 		if (num < 0)
-			return (error_message("ERROR: NEGATIVE OR NOT VALID PARAM.\n", 1));
+			return (err_msg("ERROR: NEGATIVE OR NOT VALID PARAM.\n", 1));
 		else if (i == 1 && (num < 1 || num > PHILO_MAX_COUNT))
-			return (error_message("[Argument ERROR PHILO_MAX_COUNT]\n", 1));
+			return (err_msg("[Argument ERROR PHILO_MAX_COUNT]\n", 1));
 		else if (i == 5 && (num < 0 || num > INT_MAX))
-			return (error_message("[Argument ERROR INT_MAX]\n", 1));
+			return (err_msg("[Argument ERROR INT_MAX]\n", 1));
 		else if (i != 1 && i != 5 && (num < 1 || num > INT_MAX))
-			return (error_message("[Argument ERROR]\n", 1));
+			return (err_msg("[Argument ERROR]\n", 1));
 	}
 	return (0);
 }
@@ -56,7 +51,7 @@ static int	init_rules(int argc, char **argv, t_rules *rules)
 	rules->simulation_start_time = 0;
 	rules->forks = malloc(sizeof(pthread_mutex_t) * rules->num_philosophers);
 	if (!rules->forks)
-		return (error_message("Malloc failed\n", 1));
+		return (err_msg("Malloc failed\n", 1));
 	while (i < rules->num_philosophers)
 	{
 		pthread_mutex_init(&rules->forks[i], NULL);
@@ -97,7 +92,7 @@ static int	start_threads(t_rules *rules, t_philo *philos)
 		philos[i].last_meal_time = rules->simulation_start_time;
 		if (pthread_create(&philos[i].thread, NULL,
 				philo_routine, &philos[i]) != 0)
-			return (error_message("Thread creation failed", 1));
+			return (err_msg("Thread creation failed", 1));
 		i++;
 	}
 	pthread_create(&monitor, NULL, monitor_routine, philos);
@@ -113,13 +108,13 @@ int	parse_args_and_start_philos(int argc, char **argv, t_rules *rules)
 	t_philo	*philos;
 	int		i;
 
-	if (check_args(argc, argv, 0) != 0)
+	if (check_args(argc, argv, 1) != 0)
 		return (1);
 	if (init_rules(argc, argv, rules) != 0)
 		return (1);
 	philos = malloc(sizeof(t_philo) * rules->num_philosophers);
 	if (!philos)
-		return (error_message("Malloc failed", 1));
+		return (err_msg("Malloc failed", 1));
 	init_philos(rules, philos);
 	if (start_threads(rules, philos) != 0)
 		return (1);

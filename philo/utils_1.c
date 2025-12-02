@@ -6,13 +6,13 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 13:07:09 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 16:39:17 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:04:34 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	error_message(char *text, int signal)
+int	err_msg(char *text, int signal)
 {
 	if (text)
 		printf("%s\n", text);

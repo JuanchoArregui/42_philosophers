@@ -6,7 +6,7 @@
 /*   By: jarregui <jarregui@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 20:11:51 by jarregui          #+#    #+#             */
-/*   Updated: 2025/12/02 10:55:38 by jarregui         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:17:29 by jarregui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,16 @@ void	*monitor_routine(void *arg);
 int		parse_args_and_start_philos(int argc, char **argv, t_rules *rules);
 
 //utils_1.c
-int		error_message(char *text, int signal);
+int		err_msg(char *text, int signal);
 long	get_time_ms(void);
 void	print_status(t_philo *p, char *msg, int num_meals);
 int		check_dead(t_rules *rules);
 
 //utils_2.c
 long	ft_atoi(const char *str);
+int		is_number(char *s);
 void	print_left(t_philo *p);
 void	print_right(t_philo *p);
+int		print_err_params(void);
 
 #endif
